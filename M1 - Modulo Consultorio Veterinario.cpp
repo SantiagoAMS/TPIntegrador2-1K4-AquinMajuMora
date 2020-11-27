@@ -3,58 +3,32 @@
 #include <time.h>
 #include <string.h>
 #include <math.h>
+#include "Estructurador.h"
+/*Esta parte del proyecto estará dirigida a los diferentes profesionales que atienden y registran la evolución de las mascotas en una base de datos de historias clínicas
 
-struct fecha
-{
-	int dia;
-	int mes;
-	int anio;
-};
+El sistema deberá contar con un listado de las mascotas que están registradas para ser atendidas ese día
+El veterinario deberá identificarse en el sistema por medio de su número de matrícula y contraseña y accediendo a la opción indicada
+De esta manera el veterinario llamará por apellido y nombre a la mascota que atenderá, una vez realizada esta tarea procede al ingreso de la evolución, en un texto de no más de 380 caracteres
+Luego de realizada esta operación la mascota debe desaparecer del listado
 
-struct usuarios
-{
-	char usuario[10];
-	char contrasenia[10];
-	char apeNom[60];
-};
-
-struct veterinario
-{
-	char apeNom[60];
-	int matricula;
-	int dni;
-	char telefono[25];
-};
-
-struct mascota
-{
-	char apeNom[60];
-	char Domicilio[60];
-	int dniDuenio;
-	char Localidad[60];
-	fecha fecNac;
-	float Peso;
-	char Telefono[25];
+Los datos de interés para el veterinario en este proceso son: 
+	Apellido y Nombres de la mascota (el apellido corresponde al dueño o familia), 
+	DNI del dueño, 
+	Localidad, 
+	Edad (calculada con la fecha de nacimiento registrada), 
+	Peso
 	
-};
-
-struct turno
-{
-	int matricula;
-	fecha dniDuenio;
-	char DetalleDeAtencion[380] ;
-};
+La historia clínica de la mascota es común para todos los veterinarios, 
+por lo tanto se deberá visualizar fecha de atentación de la misma y el nombre del veterinario que la redacto. */
+FILE *FMascotas, *FTurnos, *FUsuarios, *FVeterinarios;
 
 main ()
 {
-	system("color 0a");
-	printf("\n\n\n");
-	printf("\n\tPrimer modulo: Consultorio veterinario");
-	printf("\n\t====================================================");
-	printf("\n\t 1.- Iniciar Sesion. ");
-	printf("\n\t 2.- Visualizar Lista de Espera de Turnos (informe). ");
-	printf("\n\t 3.- Registrar Evolucion de la Mascota. ");
-    printf("\n\t 4.- Cerrar la aplicacion. ");
-              
-	system("pause");
+	setlocale(LC_ALL, "");
+	FMascotas=fopen("Mascotas.dat","r+b");
+	FTurnos=fopen("Turnos.dat","r+b");
+	FUsuarios=fopen("Usuarios.dat","r+b");
+	FVeterinarios=fopen("Veterinarios.dat","r+b");
+	menu(1);
 }
+
