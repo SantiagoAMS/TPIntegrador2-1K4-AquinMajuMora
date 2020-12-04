@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <string.h>
-#include <math.h>
 #include "Estructurador.h"
 
 FILE *FMascotas, *FTurnos, *FUsuarios, *FVeterinarios;
@@ -14,5 +9,13 @@ main ()
 	FTurnos=fopen("Turnos.dat","r+b");
 	FUsuarios=fopen("Usuarios.dat","r+b");
 	FVeterinarios=fopen("Veterinarios.dat","r+b");
-	menu(3);
+	do
+	{
+		opcion = menu(3);
+		if (opcion==1);//
+		else if (opcion==2);//
+		else if (opcion==3);//
+		else if (opcion==4);//
+	}
+	while (opcion!=5);
 }
