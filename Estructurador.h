@@ -52,8 +52,8 @@ struct turnos
 	char DetalleDeAtencion[381] ;
 };
 
-	veterinario regVete;
-	personal regPers;
+	veterinario regVete, lectura1;
+	personal regPers, lectura2;
 	mascota regMasc;
 	turnos regTurn;
 
@@ -66,7 +66,7 @@ int menu(int modo)
 {
 	bool confirmar=0;
 	int errores=0;
-	//char noIniciasteSesion[100]="Tienes que iniciar sesion para utilizar esta funcion";
+	char noIniciasteSesion[100]={"Tienes que iniciar sesion para utilizar esta funcion"};
 	do
 	{
 		errores=0;
@@ -77,27 +77,27 @@ int menu(int modo)
 			//printf("\n\n\n");
 			printf("\n\tPrimer modulo: Consultorio veterinario");
 			printf("\n\t====================================================");
-			if (modo==4)
-			printf("\n\t 1.- Cerrar sesion o cambiar de veterinario. ");
-			else
-			printf("\n\t 1.- Iniciar Sesion. ");
+			if (modo==4) printf("\n\t 1.- Cerrar sesion. ");
+			else printf("\n\t 1.- Iniciar Sesion. ");
 			printf("\n\t 2.- Visualizar Lista de Espera de Turnos (informe). ");
 			printf("\n\t 3.- Registrar Evolucion de la Mascota. ");
    			printf("\n\t 4.- Cerrar la aplicacion. ");
    			modo=1;
 		}
-		else if (modo==2)
+		else if (modo==2 or modo==5)
 		{
 			
 			system("color 0b");
 		    //printf("\n\n\n");
 			printf("\n\tSegundo modulo: Asistente");
 			printf("\n\t====================================================");
-			printf("\n\t 1.- Iniciar Sesion  ");
+			if (modo==5) printf("\n\t 1.- Cerrar Sesion  ");
+			else printf("\n\t 1.- Iniciar Sesion  ");
 			printf("\n\t 2.- Registrar Mascota  ");
 			printf("\n\t 3.- Registrar Turno ");
 		    printf("\n\t 4.- Listado de Atenciones por Veterinario y Fecha ");
 		 	printf("\n\t 5.- Cerrar la aplicacion. ");
+		 	modo=2;
 		}
 		else if (modo==3)
 		{

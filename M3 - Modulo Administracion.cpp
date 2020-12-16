@@ -40,10 +40,10 @@ main ()
 
 void registrarV(FILE *FFUsuarios, FILE *FFVeterinarios)
 {
-	veterinario regVeteete, lectura1;
-	turnos regTurnurn;
-	mascota regMascasc;
-	personal regPersers, lectura2;
+	veterinario regVete, lectura1;
+	turnos regTurn;
+	mascota regMasc;
+	personal regPers, lectura2;
 
 	char usuarioF[11], contraseniaF[33], contraseniaF2[33];
 	int introducido=0, errores=-1;
@@ -147,7 +147,7 @@ void registrarV(FILE *FFUsuarios, FILE *FFVeterinarios)
 				_flushall();
 			}
 		} while (errores==1 or strlen(usuarioF)<6);
-		strcpy(regVeteete.usuario,usuarioF);
+		strcpy(regVete.usuario,usuarioF);
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////Contraseña//////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,18 +270,18 @@ void registrarV(FILE *FFUsuarios, FILE *FFVeterinarios)
 				gets(contraseniaF);
 			}
 		} while (errores==1 or strlen(contraseniaF)<6 or strlen(contraseniaF)>32 or strcmp(contraseniaF2,contraseniaF)!=0 or volver==1);
-		strcpy(regVeteete.contrasenia,contraseniaF);
+		strcpy(regVete.contrasenia,contraseniaF);
 		
 		
 		system("cls");
 		
 		printf("Ingrese el apellido y nombre del veterinario: ");
 		_flushall();
-		gets(regVeteete.apeNom);
+		gets(regVete.apeNom);
 		system("cls");
 		
 		printf("Ingrese el numero de matricula del veterinario: ");
-		scanf("%i",&regVeteete.matricula);
+		scanf("%i",&regVete.matricula);
 		system("cls");
 		
 		do
@@ -294,11 +294,11 @@ void registrarV(FILE *FFUsuarios, FILE *FFVeterinarios)
 			printf("\n                              Ejemplo: 381 948-3852 (deberia escribirse como 3819483852)");
 			printf("\n                              Ingreso: ");
 			_flushall();
-			gets(regVeteete.telefono);
+			gets(regVete.telefono);
 			
 			for (int i=0;i<10;i++)
 			{
-				if (isdigit(regVeteete.telefono[i]))conteo++;
+				if (isdigit(regVete.telefono[i]))conteo++;
 				else
 				{
 					i=10;
@@ -321,11 +321,11 @@ void registrarV(FILE *FFUsuarios, FILE *FFVeterinarios)
 			
 			printf("Ingrese el dni del veterinario: ");
 			_flushall();
-			gets(regVeteete.dni);
+			gets(regVete.dni);
 			
 			for (int i=0;i<7;i++)
 			{
-				if (isdigit(regVeteete.dni[i]))conteo++;
+				if (isdigit(regVete.dni[i]))conteo++;
 				else
 				{
 					i=10;
@@ -342,7 +342,7 @@ void registrarV(FILE *FFUsuarios, FILE *FFVeterinarios)
 		} while (errores==1);
 		
 		_flushall();
-		fwrite(&regVeteete, sizeof(veterinario), 1, FFVeterinarios);
+		fwrite(&regVete, sizeof(veterinario), 1, FFVeterinarios);
 		//fwrite(&reg, sizeof(registro), 1, archivo1);
 		
 		/*char apeNom[60];
@@ -361,7 +361,7 @@ void registrarV(FILE *FFUsuarios, FILE *FFVeterinarios)
 void registrarU(FILE *FFUsuarios, FILE *FFVeterinarios)
 {
 	veterinario lectura1;
-	//turnos regTurnurn;
+	//turnos regTurn;
 	//mascota regMascasc;
 	personal lectura2;
 
