@@ -5,6 +5,9 @@
 #include <time.h>
 #include <string.h>
 #include <math.h>
+#include <ctype.h>
+
+char mayusculas[27]={"ABCDEFGHIJKLMNOPQRSTUVWXYZ"}, minusculas[27]={"abcdefghijklmnopqrstuvwxyz"}, simbolos[9]={"+-/*?¿!¡"};
 
 struct fecha
 {
@@ -15,30 +18,30 @@ struct fecha
 
 struct personal
 {
-	char usuario[10];
-	char contrasenia[10];
-	char apeNom[60];
+	char usuario[11];
+	char contrasenia[33];
+	char apeNom[61];
 };
 
 struct veterinario
 {
-	char apeNom[60];
+	char usuario[11];
+	char apeNom[61];
 	int matricula;
-	int dni;
-	char telefono[25];
-	char usuario[10];
-	char contrasenia[10];
+	char dni[9];
+	char telefono[11];
+	char contrasenia[33];
 };
 
 struct mascota
 {
-	char apeNom[60];
-	char Domicilio[60];
+	char apeNom[61];
+	char Domicilio[61];
 	int dniDuenio;
-	char Localidad[60];
+	char Localidad[61];
 	fecha fecNac;
 	float Peso;
-	char Telefono[25];
+	char Telefono[11];
 	
 };
 
@@ -46,9 +49,14 @@ struct turnos
 {
 	int matricula;
 	fecha dniDuenio;
-	char DetalleDeAtencion[380] ;
+	char DetalleDeAtencion[381] ;
 };
-	
+
+	veterinario regVete;
+	personal regPers;
+	mascota regMasc;
+	turnos regTurn;
+
 int opcion=0, LeaveProgram=0, repeticiones=0, errores=0;
 
 int menu(int modo);

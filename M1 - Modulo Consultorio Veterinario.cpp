@@ -17,8 +17,6 @@ La historia clínica de la mascota es común para todos los veterinarios,
 por lo tanto se deberá visualizar fecha de atentación de la misma y el nombre del veterinario que la redacto. */
 int logeado=0, reintentar=0, actualizacion=0;
 
-FILE *FMascotas, *FTurnos, *FUsuarios, *FVeterinarios;
-
 
 void mostrarListado(FILE *FFmascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinarios);
 void sesion(FILE *FFmascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinarios);
@@ -26,10 +24,10 @@ void atender(FILE *FFmascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterin
 
 main ()
 {
+	FILE *FMascotas, *FTurnos, *FUsuarios, *FVeterinarios;
 	setlocale(LC_ALL, "");
-	
 	FMascotas=fopen("Mascotas.dat","r+b");
-	FTurnos=fopen("Turnos.dat","r+b");
+	FTurnos=fopen("Turnos.dat","r+w");
 	FUsuarios=fopen("Usuarios.dat","r+b");
 	FVeterinarios=fopen("Veterinarios.dat","r+b");
 	
@@ -71,14 +69,19 @@ main ()
 		};
 	}
 	while (opcion!=4);
+	
+	fclose(FMascotas);
+	fclose(FTurnos);
+	fclose(FVeterinarios);
+	fclose(FUsuarios);
 }
 
 void sesion(FILE *FFmascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinarios)
 {
-	veterinario regV;
-	personal regP;
-	mascota regM;
-	turnos regT;
+	veterinario regVete;
+	personal regPers;
+	mascota regMasc;
+	turnos regTurn;
 	int logreg, errorA=0, errores=0, encontrado=0, confirmo=0;
 	char busquedaUSU[11], busquedaCON[61];
 	system("cls");
@@ -91,20 +94,20 @@ void sesion(FILE *FFmascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterina
 			printf("Nombre de usuario del veterinario: ");
 			_flushall();
 			gets(busquedaUSU);
-			rewind(FVeterinarios);
+			rewind(FFVeterinarios);
 			while(!feof(FFVeterinarios) and encontrado==0)
 			{
-				fread(&regV, sizeof(regV), 1, FFVeterinarios);
-				if (busquedaUSU!=regV.usuario) //
+				fread(&regVete, sizeof(regVete), 1, FFVeterinarios);
+				if (busquedaUSU!=regVete.usuario) //
 				{
 					printf("No. ");
-					fread(&regV, sizeof(regV), 1, FVeterinarios);
+					fread(&regVete, sizeof(regVete), 1, FFVeterinarios);
 				}
 				else
 				{
 					encontrado=1;
 					errores=0;
-					printf("Usuario '%s' encontrado con exito\n",regV.usuario);
+					printf("Usuario '%s' encontrado con exito\n",regVete.usuario);
 				};
 				if (encontrado==0)
 				{
@@ -119,12 +122,12 @@ void sesion(FILE *FFmascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterina
 			errores=1;
 			encontrado=0;
 			system("clear");
-			printf("Usuario: %s\n",regV.usuario);
+			printf("Usuario: %s\n",regVete.usuario);
 			printf("Contraseña del veterinario: ");
 			_flushall();
 			gets(busquedaCON);
 			
-			if (busquedaCON!=regV.usuario) //
+			if (busquedaCON!=regVete.usuario) //
 			{
 				printf("Contraseña incorrecta\n Deseas ingresar otro usuario?\n(1=SI, 0=NO): ");
 				scanf("%i",&reintentar);
@@ -138,7 +141,7 @@ void sesion(FILE *FFmascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterina
 			{
 				logeado=1;
 				errores=0;
-				printf("\nBienvenido %s!\n",regV.apeNom);
+				printf("\nBienvenido %s!\n",regVete.apeNom);
 				system("pause");
 			}
 		} while (errores!=0);
@@ -157,10 +160,6 @@ void sesion(FILE *FFmascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterina
 
 void atender(FILE *FFmascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinarios)
 {
-	veterinario regV;
-	personal regP;
-	mascota regM;
-	turnos regT;
 	
 	char apeDuenio[30], nombreMascota[30];
 	do
@@ -191,7 +190,7 @@ void atender(FILE *FFmascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterin
 		
 		printf("Ingrese el telefono del dueño");
 		char Telefono[25];
-	} while (!feof(FFturnos))
+	} while (!feof(FFTurnos));
 }
 
 
