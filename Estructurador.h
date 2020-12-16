@@ -25,6 +25,7 @@ struct personal
 
 struct veterinario
 {
+	int catenciones;
 	char usuario[11];
 	char apeNom[61];
 	int matricula;
@@ -37,25 +38,28 @@ struct mascota
 {
 	char apeNom[61];
 	char Domicilio[61];
-	int dniDuenio;
+	char dniDuenio[9];
 	char Localidad[61];
 	fecha fecNac;
 	float Peso;
 	char Telefono[11];
+	char atenciones[380];
+	fecha ate;
 	
 };
 
 struct turnos
 {
 	int matricula;
-	fecha dniDuenio;
+	fecha fec;
+	char dniDuenio[9];
 	char DetalleDeAtencion[381] ;
 };
 
 	veterinario regVete, lectura1;
 	personal regPers, lectura2;
-	mascota regMasc;
-	turnos regTurn;
+	mascota regMasc, lectura3;
+	turnos regTurn, lectura4;
 
 int opcion=0, LeaveProgram=0, repeticiones=0, errores=0;
 

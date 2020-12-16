@@ -343,14 +343,6 @@ void registrarV(FILE *FFUsuarios, FILE *FFVeterinarios)
 		
 		_flushall();
 		fwrite(&regVete, sizeof(veterinario), 1, FFVeterinarios);
-		//fwrite(&reg, sizeof(registro), 1, archivo1);
-		
-		/*char apeNom[60];
-		int matricula;
-		char dni;
-		char telefono[11];
-		char usuario[10];
-		char contrasenia[32]*/
 		printf("\n\nVeterinario ingresado exitosamente\n\n");
 		
 	}
@@ -361,8 +353,6 @@ void registrarV(FILE *FFUsuarios, FILE *FFVeterinarios)
 void registrarU(FILE *FFUsuarios, FILE *FFVeterinarios)
 {
 	veterinario lectura1;
-	//turnos regTurn;
-	//mascota regMascasc;
 	personal lectura2;
 
 	char usuarioF[11], contraseniaF[33], contraseniaF2[33];

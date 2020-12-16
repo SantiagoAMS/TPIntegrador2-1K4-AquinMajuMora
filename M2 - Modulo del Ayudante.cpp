@@ -1,6 +1,13 @@
 #include "Estructurador.h"
 
+// Desde aquí se hace ingreso de las mascotas, y la registración de los turnos
+// obtener un informe de las mascotas atendidos en determinada fecha por un determinado veterinario
+
 int sesion(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinarios);
+void FUNCturnos(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinarios);
+void FUNCmascotas(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinarios);
+void atenciones(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinarios);
+
 int numerito=0, logeado=0, reintentar=0;
 //-1 = reintentar en el item 1
 // 0 = uso deslogeado
@@ -151,4 +158,215 @@ int sesion(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinar
 			system("pause");
 		};
 	};
+}
+
+void FUNCturnos(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinarios)
+{
+	turnos tur;
+	system("cls");	
+	printf("---Registrar Turno---");
+	printf("\n\nFecha del turno");
+	
+	do
+	{
+		errores=1;
+		printf("\n\tAño: ");
+		scanf("%i", &tur.fec.anio);
+		if (tur.fec.anio>=1000 and tur.fec.anio<=9999) errores=0;
+		else printf("Tienes que ingresar un año valido (1000-9999)...\n");
+	} while (errores==1);
+	
+	do
+	{
+		errores=1;
+		printf("\tMes: ");
+		scanf("%i", &tur.fec.mes);
+		if (tur.fec.mes>0 and tur.fec.mes<13) errores=0;
+		else printf("Tienes que ingresar un mes valido (1-12)...\n");
+	} while (errores==1);
+	
+	do
+	{
+		errores=1;
+		printf("\tDia: ");
+		scanf("%i", &tur.fec.dia);
+		if (tur.fec.anio % 4 ==0)
+		{
+			if (tur.fec.mes==2)
+			{
+				if (tur.fec.dia>0 and tur.fec.dia<30) errores=0;
+				else printf("Tienes que ingresar un dia valido para un año biciesto(1-29)...\n");
+			}
+			else if (tur.fec.dia>0 and tur.fec.dia<32) errores=0;
+			else printf("Tienes que ingresar un dia valido (1-31)...\n");
+		}
+		else if (tur.fec.mes==2)
+		{
+			if (tur.fec.dia>0 and tur.fec.dia<29) errores=0;
+			else printf("Tienes que ingresar un dia valido (1-28)...\n");
+		}
+		else if (tur.fec.dia>0 and tur.fec.dia<32) errores=0;
+		else printf("Tienes que ingresar un dia valido (1-31)...\n");
+		
+	} while (errores==1);
+	
+	int conteo=0;
+	do
+	{
+		system("cls");
+		errores=0;
+		conteo=0;
+		
+		printf("Ingrese el dni del dueño: ");
+		_flushall();
+		gets(tur.dniDuenio);
+		
+		for (int i=0;i<7;i++)
+		{
+			if (isdigit(tur.dniDuenio[i]))conteo++;
+			else
+			{
+				i=10;
+				errores=1;
+			}
+		};
+		if (conteo!=7)
+		{
+			printf("\nEl numero tiene que tener 7 digitos (numeros)\n\n");
+			errores=1;
+			system("pause");
+		}
+		
+	} while (errores==1);
+
+
+	
+	printf("\nMatricula de Veterinario:");scanf("%d",&tur.matricula);
+	
+	printf("\nDetalles de Atencion:");_flushall();gets(tur.DetalleDeAtencion);
+	
+	fwrite(&tur,sizeof(turnos),1,FFTurnos);
+}
+
+void FUNCmascotas(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinarios)
+{
+	mascota masc;
+	system("cls");
+	puts("Datos de la Mascota: ");
+	printf("\nNombre: ");_flushall();gets(masc.apeNom);
+	printf("Domicilio: ");_flushall();gets(masc.Domicilio);
+	//printf("DNI del Dueño:");scanf("%d",&masc.dniDuenio);
+	int conteo=0;
+	do
+	{
+		system("cls");
+		errores=0;
+		conteo=0;
+		
+		printf("DNI del dueño: ");
+		_flushall();
+		gets(masc.dniDuenio);
+		
+		for (int i=0;i<7;i++)
+		{
+			if (isdigit(masc.dniDuenio[i]))conteo++;
+			else
+			{
+				i=10;
+				errores=1;
+			}
+		};
+		if (conteo!=7)
+		{
+			printf("\nEl numero tiene que tener 7 digitos (numeros)\n\n");
+			errores=1;
+			system("pause");
+		}
+		
+	} while (errores==1);
+	
+	printf("Localidad: ");_flushall();gets(masc.Localidad);
+	printf("Fecha de Nacimiento de la mascota: ");
+	
+	do
+	{
+		errores=1;
+		printf("\n\tAño: ");
+		scanf("%i", &masc.fecNac.anio);
+		if (masc.fecNac.anio>=1000 and masc.fecNac.anio<=9999) errores=0;
+		else printf("Tienes que ingresar un año valido (1000-9999)...\n");
+	} while (errores==1);
+	
+	do
+	{
+		errores=1;
+		printf("\tMes: ");
+		scanf("%i", &masc.fecNac.mes);
+		if (masc.fecNac.mes>0 and masc.fecNac.mes<13) errores=0;
+		else printf("Tienes que ingresar un mes valido (1-12)...\n");
+	} while (errores==1);
+	
+	do
+	{
+		errores=1;
+		printf("\tDia: ");
+		scanf("%i", &masc.fecNac.dia);
+		if (masc.fecNac.anio % 4 ==0)
+		{
+			if (masc.fecNac.mes==2)
+			{
+				if (masc.fecNac.dia>0 and masc.fecNac.dia<30) errores=0;
+				else printf("Tienes que ingresar un dia valido para un año biciesto(1-29)...\n");
+			}
+			else if (masc.fecNac.dia>0 and masc.fecNac.dia<32) errores=0;
+			else printf("Tienes que ingresar un dia valido (1-31)...\n");
+		}
+		else if (masc.fecNac.mes==2)
+		{
+			if (masc.fecNac.dia>0 and masc.fecNac.dia<29) errores=0;
+			else printf("Tienes que ingresar un dia valido (1-28)...\n");
+		}
+		else if (masc.fecNac.dia>0 and masc.fecNac.dia<32) errores=0;
+		else printf("Tienes que ingresar un dia valido (1-31)...\n");
+		
+	} while (errores==1);
+	/*printf("\nDia:");scanf("%d",&masc.fecNac.dia);
+	printf("Mes:");scanf("%d",&masc.fecNac.mes);
+	printf("Año:");scanf("%d",&masc.fecNac.anio);*/
+	printf("Peso:");scanf("%f",&masc.Peso);
+	//printf("Numero de telefono:");_flushall();gets(masc.Telefono);
+	
+	do
+		{
+			errores=0;
+			conteo=0;
+			printf("\nNumero de telefono del dueño: ");
+			printf("\nEl formato solicitado es el siguiente: XXX XXX-XXXX (sin espacios o signos, solo numeros): ");
+			printf("\n                              Ejemplo: 381 948-3852 (deberia escribirse como 3819483852)");
+			printf("\n                              Ingreso: ");
+			_flushall();
+			gets(masc.Telefono);
+			
+			for (int i=0;i<10;i++)
+			{
+				if (isdigit(masc.Telefono[i]))conteo++;
+				else
+				{
+					i=10;
+					errores=1;
+				}
+			};
+			if (conteo!=10)
+			{
+				printf("El numero tiene que tener 10 digitos (numeros)\n");
+				errores=1;
+				system("pause");
+			}
+		} while (errores==1);
+		
+	fwrite(&masc,sizeof(mascota),1,FFMascotas);
+}
+void atenciones(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinarios)
+{
+	
 }
