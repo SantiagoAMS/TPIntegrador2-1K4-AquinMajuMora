@@ -25,13 +25,14 @@ struct personal
 
 struct veterinario
 {
-	int catenciones;
 	char usuario[11];
+	char contrasenia[33];
+	int catenciones;
 	char apeNom[61];
 	int matricula;
 	char dni[9];
 	char telefono[11];
-	char contrasenia[33];
+	
 };
 
 struct mascota

@@ -88,13 +88,11 @@ int sesion(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinar
 			_flushall();
 			gets(busquedaUSU);
 
-			//rewind(FFUsuarios);
 			rewind(FFVeterinarios);
-			//fread(&lectura2, sizeof(personal), 1, FFUsuarios);
-			fread(&lectura1, sizeof(veterinario), 1, FFVeterinarios);	
+			fread(&lectura1, sizeof(veterinario), 1, FFVeterinarios);
 			while(!feof(FFVeterinarios)and encontrado==0)
 			{
-				if (strcmp(lectura1.usuario,busquedaUSU)==0/* or strcmp(lectura2.usuario,usuarioF)==0*/)
+				if (strcmp(lectura1.usuario,busquedaUSU)==0)
 				{
 					encontrado=1;
 					errores=0;
@@ -240,242 +238,126 @@ void mostrarListado(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FF
 void atender(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinarios)
 {
 	char nomi[60],ate[380], dni[9];
-	int errores=1,encontrado=0,encon=0,b;
+	int errores=1, encontrado=0, encon=0, b;
 	
 	FILE*FTurnos,*auxiliar;
 	
-	//mascota regMasc/*masc*/;
 	turnos tur1;
 	veterinario vet;
 	bool band;
-		
 	system("cls");
-	printf("Ingrese el nombre de la Mascota:");
-	_flushall();
-	gets(nomi);
-
-	do
+	
+	rewind(FFTurnos);
+	fread(&regTurn, sizeof(turnos), 1, FFTurnos);
+	
+	if (FFTurnos==NULL)
 	{
-		errores=1;
-		rewind(FFMascotas);
-		while(!feof(FFMascotas) and encon==0)
+		printf("No hay mascotas que atender...");
+	}
+	else
+	{
+		printf("Ingrese el nombre de la Mascota: ");
+		_flushall();
+		gets(nomi);
+	
+		do
 		{
-			while(encon==0)
-			{
-				fread(&regMasc, sizeof(mascota), 1, FFMascotas);
-				if ((strcmp(nomi,regMasc.apeNom))==0)
-				{
-					encon=1;
-					strcpy(dni,regMasc.dniDuenio);
-				}
-			}
-		}
-		fclose(FFMascotas);
-		
-		if(encon==0)
-		{		
-			printf("No existe el usuario\n");
-			system("pause");
-			return;
-		}
-		else
-		{
-			encon=0;
-			errores=0;
-			rewind(FTurnos);
-			while(!feof(FTurnos)and encon==0)
+			errores=1;
+			rewind(FFMascotas);
+			while(!feof(FFMascotas) and encon==0)
 			{
 				while(encon==0)
 				{
-					fread(&tur1, sizeof(turnos), 1, FTurnos);
-					if(dni==tur1.dniDuenio)
+					fread(&regMasc, sizeof(mascota), 1, FFMascotas);
+					if ((strcmp(nomi,regMasc.apeNom))==0)
 					{
-					strcpy(ate,tur1.DetalleDeAtencion);
-					encon=1;
+						encon=1;
+						strcpy(dni,regMasc.dniDuenio);
 					}
-				}	fclose(FTurnos);
-			}
-			
-			system("cls");
-			printf("---MASCOTA---:\nNombre:'%s'\nDetalles de la atencion:",regMasc.apeNom);
-			puts(ate);
- 			fread(&regMasc,sizeof(mascota),1,FFMascotas);
- 			band=false;
- 			while(!feof(FFMascotas) and band==false)
-			{
- 				if ((strcmp(nomi,regMasc.apeNom))==0)
- 				{	
- 					printf("\n\nIngrese la evolucion de la Mascota: ");_flushall();gets(regMasc.atenciones);
- 					regMasc.ate.dia=tur1.fec.dia;
-					regMasc.ate.mes=tur1.fec.mes;
-					regMasc.ate.anio=tur1.fec.anio;
- 					fseek(FFMascotas,- sizeof(mascota),SEEK_CUR);
- 					fwrite(&regMasc,sizeof(mascota),1,FFMascotas);
- 					band=true;
 				}
-				 else
- 				{
-				 	fread(&regMasc,sizeof(mascota),1,FFMascotas);
- 				}
- 			}
+			}
 			fclose(FFMascotas);
- 			fread(&vet,sizeof(veterinario),1,FFVeterinarios);
- 			band=false;
- 			while(!feof(FFVeterinarios) and band==false)
-			{
- 				if (vet.matricula==tur1.matricula)
- 				{	
- 					vet.catenciones++;
- 					fseek(FFVeterinarios,- sizeof(veterinario),SEEK_CUR);
- 					fwrite(&vet,sizeof(veterinario),1,FFVeterinarios);
- 					band=true;
- 				}
- 				else
- 				{
-				 fread(&vet,sizeof(veterinario),1,FFVeterinarios);
- 				}
- 			}
-		}
-		fclose(FFVeterinarios);	
-		FTurnos=fopen("Turnos.dat","r+b");
-		auxiliar=fopen("auxiliar.dat","wb");
-		fread(&tur1,sizeof(turnos),1,FFTurnos);
- 			b=0;
- 			while (!feof(FFTurnos))
- 			{
- 			if (dni!=tur1.dniDuenio)
- 			fwrite(&tur1,sizeof(turnos),1,auxiliar);
- 			else
- 			b=1;
- 			fread(&tur1,sizeof(turnos),1,FFTurnos);
- 			}	
- 			fclose(FTurnos);
- 			fclose(auxiliar);
- 			remove("Turnos.dat");
- 			rename("auxiliar.dat","Turnos.dat");
-			}while(errores!=0);
-			return;
-	/*char apeDuenio[30], nombreMascota[30];
-	int errores=0, encontrado=0;
-	
-	int dia, mes, anio;
-	system("cls");
-	printf("\n\tPor favor, ingrese la fecha actual\n\n\t");
-	
-	do
-	{
-		errores=1;
-		printf("\n\tAño: ");
-		scanf("%i", &anio);
-		if (anio>=1000 and anio<=9999) errores=0;
-		else printf("Tienes que ingresar un año valido (1000-9999)...\n");
-	} while (errores==1);
-	
-	do
-	{
-		errores=1;
-		printf("\tMes: ");
-		scanf("%i", &mes);
-		if (mes>0 and mes<13) errores=0;
-		else printf("Tienes que ingresar un mes valido (1-12)...\n");
-	} while (errores==1);
-	
-	do
-	{
-		errores=1;
-		printf("\tDia: ");
-		scanf("%i", &dia);
-		if (anio % 4 ==0)
-		{
-			if (mes==2)
-			{
-				if (dia>0 and dia<30) errores=0;
-				else printf("Tienes que ingresar un dia valido para un año biciesto(1-29)...\n");
+			
+			if(encon==0)
+			{		
+				printf("No existe el la mascota\n");
+				system("pause");
+				return;
 			}
-			else if (dia>0 and dia<32) errores=0;
-			else printf("Tienes que ingresar un dia valido (1-31)...\n");
-		}
-		else if (mes==2)
-		{
-			if (dia>0 and dia<29) errores=0;
-			else printf("Tienes que ingresar un dia valido (1-28)...\n");
-		}
-		else if (dia>0 and dia<32) errores=0;
-		else printf("Tienes que ingresar un dia valido (1-31)...\n");
-		
-	} while (errores==1);
-	
-	rewind(FFMascotas);
-	rewind(FFTurnos);
-	
-	fread(&lectura3, sizeof(mascota), 1, FFMascotas);
-	fread(&lectura4, sizeof(turnos), 1, FFTurnos);
-	system("cls");
-	
-	do
-	{
-		errores=0;
-		encontrado=0;
-		printf("\n\tIngrese el apellido del dueño: ");
-		_flushall();
-		gets(apeDuenio);
-		
-		while(!feof(FFTurnos) and encontrado==0)
-		{//Intenta alinear los turnos y las mascotas
-			rewind(FFMascotas);
-			while(!feof(FFMascotas) and encontrado==0)
+			else
 			{
-				if(lectura4.fec.dia==dia and lectura4.fec.mes==mes and lectura4.fec.anio==anio and lectura1.matricula==lectura4.matricula and strcmp(lectura3.dniDuenio,lectura4.dniDuenio)==0)
-				{//Si la mascota tiene atencion para el veterinario logeado y para este dia
-					if (strstr(apeDuenio,lectura3.apeNom)!=NULL)//
-					{//Si el apellido ingresado corresponde con el del apellido de la mascota
-						encontrado=1;
-						printf("\n Nombre de la mascota: %s",lectura3.apeNom);	
-						if (lectura4.DetalleDeAtencion==NULL)
-						{//Si la mascota fue atendida previamente, muestra su evolucion
-							printf("\nNo hay detalles...");
-						}
-						else
+				encon=0;
+				errores=0;
+				rewind(FTurnos);
+				while(!feof(FTurnos)and encon==0)
+				{
+					while(encon==0)
+					{
+						fread(&tur1, sizeof(turnos), 1, FTurnos);
+						if(dni==tur1.dniDuenio)
 						{
-							printf("%s",lectura4.DetalleDeAtencion);
+						strcpy(ate,tur1.DetalleDeAtencion);
+						encon=1;
 						}
-					}
+					}	fclose(FTurnos);
 				}
-				if (encontrado==0)fread(&lectura3, sizeof(mascota), 1, FFMascotas);
+				
+				system("cls");
+				printf("---MASCOTA---:\nNombre: '%s'\nDetalles de la atencion:",regMasc.apeNom);
+				puts(ate);
+	 			fread(&regMasc,sizeof(mascota),1,FFMascotas);
+	 			band=false;
+	 			while(!feof(FFMascotas) and band==false)
+				{
+	 				if ((strcmp(nomi,regMasc.apeNom))==0)
+	 				{	
+	 					printf("\n\nIngrese la evolucion de la Mascota: \n");_flushall();gets(regMasc.atenciones);
+	 					regMasc.ate.dia=tur1.fec.dia;
+						regMasc.ate.mes=tur1.fec.mes;
+						regMasc.ate.anio=tur1.fec.anio;
+	 					fseek(FFMascotas,- sizeof(mascota),SEEK_CUR);
+	 					fwrite(&regMasc,sizeof(mascota),1,FFMascotas);
+	 					band=true;
+					}
+					 else
+	 				{
+					 	fread(&regMasc,sizeof(mascota),1,FFMascotas);
+	 				}
+	 			}
+				fclose(FFMascotas);
+	 			fread(&vet,sizeof(veterinario),1,FFVeterinarios);
+	 			band=false;
+	 			while(!feof(FFVeterinarios) and band==false)
+				{
+	 				if (vet.matricula==tur1.matricula)
+	 				{	
+	 					vet.catenciones++;
+	 					fseek(FFVeterinarios,- sizeof(veterinario),SEEK_CUR);
+	 					fwrite(&vet,sizeof(veterinario),1,FFVeterinarios);
+	 					band=true;
+	 				}
+	 				else
+	 				{
+					 fread(&vet,sizeof(veterinario),1,FFVeterinarios);
+	 				}
+	 			}
 			}
-			if (encontrado==0)fread(&lectura4, sizeof(turnos), 1, FFTurnos);
-		}
-	} while	(encontrado==0);
-	system("pause");
-	
-	do
-	{
-			/*Apellido y Nombres de la mascota (el apellido corresponde al dueño o familia), 
-			DNI del dueño, 
-			Localidad, 
-			Edad (calculada con la fecha de nacimiento registrada), 
-			Peso*/
-		
-		/*system("cls");
-		
-		
-		printf("Ingrese el nombre de la mascota: ");
-		_flushall();
-		gets(apeDuenio);
-		
-		printf("Ingrese el domicilio de la mascota: ");
-		
-		printf("Ingrese el dni del dueño: ");
-		
-		printf("Fecha de nacimiento de la mascota: \n");
-		printf("\tAño: ");
-		printf("\tMes: ");
-		printf("\tDia: ");
-		
-		printf("Ingrese el peso de la mascota");
-		
-		printf("Ingrese el telefono del dueño");
-		char Telefono[25];
-	} while (!feof(FFTurnos));*/
-	/**/
+			fclose(FFVeterinarios);	
+			FTurnos=fopen("Turnos.dat","r+b");
+			auxiliar=fopen("auxiliar.dat","wb");
+			fread(&tur1,sizeof(turnos),1,FFTurnos);
+	 		b=0;
+	 		while (!feof(FFTurnos))
+	 		{
+	 			if (dni!=tur1.dniDuenio) fwrite(&tur1,sizeof(turnos),1,auxiliar);
+	 			else b=1;
+	 			fread(&tur1,sizeof(turnos),1,FFTurnos);
+	 		}	
+	 		fclose(FTurnos);
+	 		fclose(auxiliar);
+	 		remove("Turnos.dat");
+	 		rename("auxiliar.dat","Turnos.dat");
+		}while(errores!=0);
+		return;		
+	}
 }

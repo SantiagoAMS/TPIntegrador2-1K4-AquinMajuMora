@@ -23,24 +23,15 @@ main ()
 	FVeterinarios=fopen("Veterinarios.dat","r+b");
 	do
 	{
-		opcion = menu(2);
-		if (opcion==1);//Iniciar sesion
-		else if (opcion==2);//Registrar mascota
-		else if (opcion==3);//registrar turno
-		else if (opcion==4);//listado de atenciones por veterinario y fecha
-		
-	} while (opcion!=5);
-	
-	do
-	{
+
 		if (numerito==2 or logeado==1)//SI la sesion esta iniciada
 		{
 			menu(5);
 			
 			if (opcion==1) numerito = sesion(FMascotas, FTurnos, FUsuarios, FVeterinarios);
-			else if (opcion==2); //
-			else if (opcion==3); //
-			else if (opcion==4); //
+			else if (opcion==2) FUNCturnos(FMascotas, FTurnos, FUsuarios, FVeterinarios);
+			else if (opcion==3) FUNCmascotas(FMascotas, FTurnos, FUsuarios, FVeterinarios);
+			else if (opcion==4) atenciones(FMascotas, FTurnos, FUsuarios, FVeterinarios);
 		}
 		else if (numerito==1)//MARCADO para reinicio
 		{
@@ -82,14 +73,14 @@ int sesion(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinar
 			printf("\n\tNombre de usuario del asistente: ");
 			_flushall();
 			gets(busquedaUSU);
-
-			//rewind(FFUsuarios);
-			rewind(FFVeterinarios);
-			//fread(&lectura2, sizeof(personal), 1, FFUsuarios);
-			fread(&lectura1, sizeof(veterinario), 1, FFVeterinarios);	
-			while(!feof(FFVeterinarios)and encontrado==0)
+			
+			rewind(FFUsuarios);
+			fread(&lectura2, sizeof(personal), 1, FFUsuarios);
+			
+			while(!feof(FFUsuarios)and encontrado==0)
 			{
-				if (strcmp(lectura1.usuario,busquedaUSU)==0/* or strcmp(lectura2.usuario,usuarioF)==0*/)
+				
+				if (strcmp(lectura2.usuario,busquedaUSU)==0/* or strcmp(lectura2.usuario,usuarioF)==0*/)
 				{
 					encontrado=1;
 					errores=0;
@@ -98,8 +89,7 @@ int sesion(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinar
 				}
 				else
 				{
-					fread(&lectura1, sizeof(veterinario), 1, FFVeterinarios);
-					//fread(&lectura2, sizeof(personal), 1, FFUsuarios);
+					fread(&lectura2, sizeof(personal), 1, FFUsuarios);
 				}
 			};
 			if (encontrado==0)
@@ -122,7 +112,7 @@ int sesion(FILE *FFMascotas, FILE *FFTurnos, FILE *FFUsuarios, FILE *FFVeterinar
 			_flushall();
 			gets(busquedaCON);
 			
-			if (strcmp(lectura1.contrasenia,busquedaCON)!=0) //
+			if (strcmp(lectura2.contrasenia,busquedaCON)!=0) //
 			{
 				printf("\n\tContraseña incorrecta\n\n\n\tDeseas ingresar otro usuario, o intentar con el mismo?\n\t(1=OTRO, 0=MISMO): ");
 				do

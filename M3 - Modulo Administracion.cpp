@@ -342,6 +342,7 @@ void registrarV(FILE *FFUsuarios, FILE *FFVeterinarios)
 		} while (errores==1);
 		
 		_flushall();
+		
 		fwrite(&regVete, sizeof(veterinario), 1, FFVeterinarios);
 		printf("\n\nVeterinario ingresado exitosamente\n\n");
 		
@@ -366,7 +367,7 @@ void registrarU(FILE *FFUsuarios, FILE *FFVeterinarios)
 	
 	if (FFUsuarios==NULL)
 	{
-		printf("Error al abrir el archivo veterinario");
+		printf("Error al abrir el archivo de asistentes");
 		system("pause");
 	}
 	else
@@ -581,11 +582,9 @@ void registrarU(FILE *FFUsuarios, FILE *FFVeterinarios)
 		printf("Ingrese el apellido y nombre del asistente: ");
 		_flushall();
 		gets(regPers.apeNom);
-		system("cls");
-		
 		_flushall();
-		fwrite(&regPers, sizeof(personal), 1, FFUsuarios);
-
+		
+		system("cls");
 		printf("\n\nAsistente ingresado exitosamente\n\n");
 	}
 	
